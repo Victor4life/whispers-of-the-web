@@ -270,7 +270,7 @@ noticeStyle.textContent = `
 document.head.appendChild(noticeStyle);
 
 /////////////////////////////////////////////////
-// 🕯️ THE GAME: ONE WHISPERING PRESENCE (3D AUDIO)
+// 🕯️ THE GAME: ONE WHISPERING PRESENCE (3D AUDIO + JUMPSCARE)
 /////////////////////////////////////////////////
 
 function startCreepyGame() {
@@ -296,7 +296,7 @@ function startCreepyGame() {
 
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   const gain = audioCtx.createGain();
-  gain.gain.value = 1.0;
+  gain.gain.value = 1.3; // Louder whispers
   gain.connect(audioCtx.destination);
 
   function playNextWhisper() {
@@ -309,7 +309,9 @@ function startCreepyGame() {
         src.buffer = decoded;
         const panner = audioCtx.createPanner();
         panner.panningModel = "HRTF";
-        panner.setPosition(Math.random() < 0.5 ? -1 : 1, 0, 2);
+        const side = Math.random() < 0.5 ? -1 : 1;
+        const distance = Math.random() * 2 + 1.5;
+        panner.setPosition(side, 0, distance); // Feels behind the user
         src.connect(panner).connect(gain);
         src.start();
       });
@@ -325,6 +327,7 @@ function startCreepyGame() {
   });
 
   function endGame(success) {
+    // 🩸 Create the end message
     const end = document.createElement("div");
     end.className = "end-message";
     end.textContent = success
@@ -332,12 +335,30 @@ function startCreepyGame() {
       : "It lingers behind you.";
     game.appendChild(end);
 
+    // 🩶 Trigger jumpscare before ending
+    setTimeout(() => triggerJumpScare(), 5000);
+
     setTimeout(() => {
       document.exitFullscreen().catch(() => {});
       document.body.style.overflow = "";
       game.remove();
       window.location.reload(); // auto-return
-    }, 9000);
+    }, 10000);
+  }
+
+  function triggerJumpScare() {
+    const scare = document.createElement("div");
+    scare.id = "jumpscare";
+    scare.innerHTML = `<img src="images/jumpscare.png" alt="scare" />`;
+    game.appendChild(scare);
+
+    const scream = new Audio("audio/scream.mp3");
+    scream.volume = 1.0;
+    scream.play();
+
+    setTimeout(() => {
+      scare.remove();
+    }, 2000);
   }
 }
 
@@ -384,6 +405,34 @@ style.textContent = `
     color: red;
     text-shadow: 0 0 15px crimson;
     animation: fadeInOut 3s ease-in-out;
+  }
+
+  #jumpscare {
+    position: fixed;
+    inset: 0;
+    z-index: 1000000;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: flash 0.2s ease-in-out;
+  }
+
+  #jumpscare img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: pop 0.3s ease-in;
+  }
+
+  @keyframes flash {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  @keyframes pop {
+    from { transform: scale(0.9); opacity: 0.8; }
+    to { transform: scale(1.05); opacity: 1; }
   }
 
   @keyframes flicker {
