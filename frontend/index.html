@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Whispers of the Web</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Creepster&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="background"></div>
+    <div class="overlay"></div>
+    <div class="static-overlay"></div>
+    <div id="ghost-container"></div>
+
+    <h1 class="flicker">👁️ Whispers of the Web</h1>
+    <p class="subtitle">Tune in to the frequencies between the code...</p>
+
+    <div class="radio-buttons">
+      <button onclick="playChannel(1)">Channel 1</button>
+      <button onclick="playChannel(2)">Channel 2</button>
+      <button onclick="playChannel(3)">Channel 3</button>
+    </div>
+
+    <div id="message-box">Awaiting signal...</div>
+    <audio id="audio-player" controls></audio>
+    <audio
+      id="ambient"
+      src="https://upload.wikimedia.org/wikipedia/commons/d/d3/Scary_ambience.ogg"
+      loop
+    ></audio>
+
+    <button id="summon-btn" class="summon-btn"></button>
+    <div id="ghost-container"></div>
+    <div id="message-box"></div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
