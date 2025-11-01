@@ -349,7 +349,7 @@ function startCreepyGame() {
   function triggerJumpScare() {
     const scare = document.createElement("div");
     scare.id = "jumpscare";
-    scare.innerHTML = `<img src="images/jumpscare.png" alt="scare" />`;
+    scare.innerHTML = `<img src="images/last.png" alt="scare" />`;
     game.appendChild(scare);
 
     const scream = new Audio("audio/scream.mp3");
